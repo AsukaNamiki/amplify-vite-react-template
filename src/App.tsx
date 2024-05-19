@@ -24,11 +24,23 @@ function App() {
     client.models.Todo.delete({ id })
   }
 
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<File | undefined>();
 
-  const handleChange = (event: any) => {
-    setFile(event.target.files[0]);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      setFile(files[0]);
+    }
   };
+
+  const handleUpload = () => {
+    if (file) { // file が undefined でないことを確認
+      uploadData({
+        path: `picture-submissions/${file.name}`,
+        data: file,
+      })
+  };
+};
 
   return (
     <Authenticator>
@@ -54,13 +66,7 @@ function App() {
       <button onClick={signOut}>Sign out</button>
       <input type="file" onChange={handleChange} />
         <button
-          onClick={() =>
-            uploadData({
-              path: `picture-submissions/${file.name}`,
-              data: file,
-          })
-        }
-      >
+          onClick={() =>{handleUpload}}>
         Upload
       </button>
     </main>       
