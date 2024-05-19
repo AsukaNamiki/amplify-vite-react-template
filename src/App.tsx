@@ -3,6 +3,7 @@ import '@aws-amplify/ui-react/styles.css'
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import { uploadData } from 'aws-amplify/storage';
 
 const client = generateClient<Schema>();
 
@@ -23,10 +24,17 @@ function App() {
     client.models.Todo.delete({ id })
   }
 
+  const [file, setFile] = useState();
+
+  const handleChange = (event: any) => {
+    setFile(event.target.files[0]);
+  };
+
   return (
     <Authenticator>
       {({ signOut, user }) => (
     <main>
+      <h1>{user?.signInDetails?.loginId}'s todos</h1>
       <h1>My todos</h1>
       <button onClick={createTodo}>+ new</button>
       <ul>
@@ -44,6 +52,17 @@ function App() {
         </a>
       </div>
       <button onClick={signOut}>Sign out</button>
+      <input type="file" onChange={handleChange} />
+        <button
+          onClick={() =>
+            uploadData({
+              path: `picture-submissions/${file.name}`,
+              data: file,
+          })
+        }
+      >
+        Upload
+      </button>
     </main>       
     )}
     </Authenticator>
