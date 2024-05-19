@@ -31,6 +31,7 @@ function App() {
     if (files) {
       setFile(files[0]);
     }
+    console.log(file)
   };
 
   const handleUpload = () => {
@@ -39,6 +40,7 @@ function App() {
         path: `picture-submissions/${file.name}`,
         data: file,
       })
+      alert(`${file.name}がアップロードされました。`)
   };
 };
 
@@ -66,7 +68,7 @@ function App() {
       <button onClick={signOut}>Sign out</button>
       <input type="file" onChange={handleChange} />
         <button
-          onClick={() =>{handleUpload}}>
+          onClick={handleUpload}>
         Upload
       </button>
     </main>       
